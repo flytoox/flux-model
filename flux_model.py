@@ -1,9 +1,11 @@
 import torch
 from diffusers import FluxPipeline
+import os
 
 class FluxAIModel:
     def __init__(self, model_id="black-forest-labs/FLUX.1-dev", torch_dtype=torch.bfloat16):
-        self.pipe = FluxPipeline.from_pretrained(model_id, torch_dtype=torch_dtype, token="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")
+        hfToken = os.getenv('hfToken')
+        self.pipe = FluxPipeline.from_pretrained(model_id, torch_dtype=torch_dtype, token=hfToken)
         self.pipe.enable_model_cpu_offload()  # Offload to CPU if VRAM is limited
 
     def generate_image(self, prompt, height=1024, width=1024, guidance_scale=3.5, 
